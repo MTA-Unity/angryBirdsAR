@@ -16,13 +16,15 @@ public class GameManagerScript : MonoBehaviour
     public GameObject summery;
     public GameObject levelPicker;
     public GameObject confirmLocationButton; // Reference to the Confirm Location button
+    public GameObject pauseButton;
     public Text topLeftTooltip;
     public Text birdsLeft;
     public int scoreCounter = 0;
     public int birdsCounter = 4;
     private int amo;
     public TextMeshProUGUI winStatus;
-    public SoundEffectsScript soundEffects;
+    public TextMeshProUGUI nextContinueText;
+    private SoundEffectsScript soundEffects;
     public GameObject gameplayUI; // Reference to the UI elements during gameplay
     private ARContentPlacement planeController;
 
@@ -49,6 +51,7 @@ public class GameManagerScript : MonoBehaviour
     public void chooseLevelState() {
         levelPicker.SetActive(true);
         arPlacement.SetActive(false);
+        pauseButton.SetActive(false);
         confirmLocationButton.SetActive(false);
         setTooltipPurpose(topLeftTooltipEnum.NONE);
         summery.SetActive(false);
@@ -62,6 +65,7 @@ public class GameManagerScript : MonoBehaviour
         confirmLocationButton.SetActive(false);
         setTooltipPurpose(topLeftTooltipEnum.SCORE);
         gameplayUI.SetActive(true);
+        pauseButton.SetActive(true);
     }
 
     public void IncrementScore(int append)
@@ -85,6 +89,32 @@ public class GameManagerScript : MonoBehaviour
        scoreCounter = 0;
     }
 
+    public void NextOrContinueLevel()
+    {
+        Debug.Log(nextContinueText.text);
+        if(nextContinueText.text == "Continue"){
+            summery.SetActive(false);
+            pauseButton.SetActive(true);
+            gameplayUI.SetActive(true);
+        }
+        else if(nextContinueText.text == "Next Level"){
+            var level = planeController.CurrentLevelName();
+            if(level == "level1")
+            {
+                planeController.setLevelToPlace("level2");
+            }
+            else if(level == "level2")
+            {
+                planeController.setLevelToPlace("level3");
+            } 
+            else 
+            {
+                planeController.setLevelToPlace("level1");
+            }
+            RestartLevel();
+        }
+    }
+
     public int DecreaseBirdCount() {
         birdsLeft.text = "birds left " + birdsCounter;
         return birdsCounter--;
@@ -94,12 +124,20 @@ public class GameManagerScript : MonoBehaviour
         soundEffects.Win();
         ShowSummery();
         winStatus.SetText("You Win!");
+        nextContinueText.SetText("Next Level");
     }
 
     public void Lose(){
         soundEffects.Lose();
         ShowSummery();
         winStatus.SetText("You Lose!");
+    }
+
+    public void Pause() {
+        pauseButton.SetActive(false);
+        winStatus.SetText("Pause");
+        nextContinueText.SetText("Continue");
+        ShowSummery();
     }
 
     private void ShowSummery() {

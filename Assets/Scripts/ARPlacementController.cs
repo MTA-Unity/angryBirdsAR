@@ -9,6 +9,7 @@ public class ARContentPlacement : MonoBehaviour
     public GameObject level1;
     public GameObject level2;
     public GameObject level3;
+    private string currentLevelName;
     private GameObject objectToPlace;
     private GameObject spawnedObject;
 
@@ -35,8 +36,13 @@ public class ARContentPlacement : MonoBehaviour
         return false;
     }
 
+    public string CurrentLevelName(){
+        return currentLevelName;
+    }
+
     public void setLevelToPlace(string level)
     { 
+        currentLevelName = level;
         objectToPlace = level1;
         
         if(level == "level2") {

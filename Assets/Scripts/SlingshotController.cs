@@ -92,15 +92,20 @@ public class SlingshotController : MonoBehaviour
         // Debug.Log("release position");
         // Debug.Log(currentBird.transform.position);
 
-        Vector3 launchDirection = (launchPosition.position-currentBird.transform.position);
-        float launchForce = 4f + 20f * Convert.ToSingle(Math.Tanh(launchDirection.magnitude));
-        launchDirection.z = 2f*launchDirection.magnitude;
-        // Debug.Log("launch direction");
-        // Debug.Log(launchDirection);
-        // Debug.Log("launch force");
-        // Debug.Log(launchForce);
-        //Vector3 launchDirection = -(launchPosition.position + (dragStartPosition - releasePosition));//-(launchPosition.position - releasePosition);
-
+        Vector3 launchDirection = (Camera.main.transform.forward + Camera.main.transform.up * 0.1f).normalized;
+        Debug.Log("launch direction normalized");
+        Debug.Log(launchDirection);
+        launchDirection.x += (launchPosition.position.x - releasePosition.x);
+        launchDirection.y += (dragStartPosition.y - releasePosition.y);
+        float launchForce = 15f * Convert.ToSingle(Math.Tanh(launchDirection.magnitude));
+        Debug.Log("launch direction");
+        Debug.Log(launchDirection);
+        Debug.Log("launch force");
+        Debug.Log(launchForce);
+        Debug.Log("launch position");
+        Debug.Log(launchPosition.position);
+        Debug.Log("release position");
+        Debug.Log(releasePosition);
         // Set the bird to be non-kinematic before applying the force
         currentBird.isKinematic = false;
         //currentBird.transform.position = launchPosition.position;

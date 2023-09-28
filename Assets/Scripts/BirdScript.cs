@@ -42,6 +42,11 @@ public class BirdScript : MonoBehaviour
         {
             Die();
         }
+        var pigs = GameObject.FindGameObjectsWithTag("Pig");
+        if(pigs.Length == 0) 
+        {
+            gameManagerScript.Win();
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
