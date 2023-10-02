@@ -72,6 +72,8 @@ public class GameManagerScript : MonoBehaviour
 
     public void FinishLevel()
     {
+        HighScoreManager highScoreManager = FindObjectOfType<HighScoreManager>();
+        highScoreManager.SaveHighScore(scoreCounter);
         SceneManager.LoadScene("MenuScene");
     }
 
@@ -103,8 +105,12 @@ public class GameManagerScript : MonoBehaviour
     }
 
     private void ShowSummery() {
+        
         summery.SetActive(true);
         gameplayUI.SetActive(false);
+        HighScoreManager highScoreManager = FindObjectOfType<HighScoreManager>();
+        highScoreManager.SaveHighScore(scoreCounter);
+
     }
 
     private void setTooltipPurpose(topLeftTooltipEnum purpose) {
